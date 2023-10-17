@@ -1,0 +1,22 @@
+server:
+  port: 8083  #porta usada pelo serviço
+  wait-time-in-ms-when-sync-empty: 3000  #tempo entre tentativas de conexão
+
+spring:
+  spring:
+    profiles:
+      active: native
+  data: #dados do banco de dados (aqui, MongoDb) - incluindo uri, nome do database, e criação automática
+      mongodb:
+        uri: mongodb://admin:admin@127.0.0.1:27017/ebac?authSource=admin&retryWrites=true&w=majority
+        database: venda
+        auto-index-creation: true
+
+application: #dados dos serviços vinculados - p/ verificar se o cliente e os produtos apontados existem
+  produtoService:
+    url: http://localhost:8082
+    endpointConsultarProduto: ${application.produtoService.url}/produto
+  clienteService:
+    url: http://localhost:8081
+    endpointConsultarCliente: ${application.clienteService.url}/cliente/isCadastrado/{id}
+application-version: 1.0 #determina a versão atual da aplicação para exibição no OpenAPI/Swagger
